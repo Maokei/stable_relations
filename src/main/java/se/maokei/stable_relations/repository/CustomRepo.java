@@ -1,6 +1,8 @@
 package se.maokei.stable_relations.repository;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
@@ -14,10 +16,11 @@ import java.util.stream.Collectors;
 @Repository
 @RequiredArgsConstructor
 public class CustomRepo {
+    private final Logger LOG = LoggerFactory.getLogger(getClass());
     private final DatabaseClient client;
 
     public Flux<Stable> getAllStables() {
-        String query = "SELECT stable.id, stable.name sname, horse.id hid, horse.name hname, horsebreed.id bid, horsebreed.name bname FROM stable.stable INNER JOIN horse ON stable.id = horse.stable_id INNER JOIN horsebreed ON horse.horsebreed_id = horsebreed.id ORDER BY stable.id";
+        String query = "SELECT stable.id, stable.name sname, horse.id hid, horse.name hname, horsebreed.id bid, horsebreed.name bname FROM stable INNER JOIN horse ON stable.id = horse.stable_id INNER JOIN horsebreed ON horse.horsebreed_id = horsebreed.id ORDER BY stable.id";
         return client.sql(query)
                 .fetch()
                 .all()
@@ -92,5 +95,17 @@ public class CustomRepo {
                         .name((String) row.get("name"))
                         .build()
                 );
+    }
+
+    public Mono<Integer> addHorseBreed(HorseBreed horseBreed) {
+        String query = "INSERT INTO horsebreed (name) VALUES (:name)";
+        return client.sql(query)
+                .bind("name", horseBreed.getName())
+                .filter(
+                        ((statement, next) -> statement.returnGeneratedValues("id").execute())
+                ).mapValue(Integer.class).one();
+        /*.fetch().first()
+                .subscribe(data -> LOG.info("inserted data : {}", data),
+                        error -> LOG.info("error: {}", error));*/
     }
 }

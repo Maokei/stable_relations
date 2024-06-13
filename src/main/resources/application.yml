@@ -1,16 +1,25 @@
-# Stable relations
 spring:
+  application:
+    name: stable relations
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          repository: DEBUG
+        r2dbc:
+          core: DEBUG
   #datasource:
   #  url: localhost
   #  username: root
   #  password: test123
-  r2dbc:
-    name: stable
-    username: root
-    password: test123
-    url: r2dbc:mariadb://localhost/stable
-
+  #r2dbc:
+  #  name: stable
+  #  username: root
+  #  password: test123
+  #  url: r2dbc:mariadb://localhost/stable
   #spring.r2dbc.url=r2dbc:postgresql://localhost/test
   #spring.r2dbc.username=user
   #spring.r2dbc.password=password
   #spring.r2dbc.initialization-mode=always
+

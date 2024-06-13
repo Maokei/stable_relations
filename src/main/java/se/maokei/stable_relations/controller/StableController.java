@@ -16,14 +16,14 @@ import se.maokei.stable_relations.model.Stable;
 import se.maokei.stable_relations.repository.CustomRepo;
 import se.maokei.stable_relations.repository.HorseBreedRepository;
 import se.maokei.stable_relations.repository.HorseRepository;
-import se.maokei.stable_relations.repository.StableRepository;
+import se.maokei.stable_relations.repository.StableRepositorySorting;
 
 @RestController
 @RequestMapping(value = "/stable")
 @RequiredArgsConstructor
 @Slf4j
 public class StableController {
-    private final StableRepository stableRepository;
+    private final StableRepositorySorting stableRepositorySorting;
     private final HorseRepository horseRepository;
     private final HorseBreedRepository horseBreedRepository;
     private final CustomRepo customRepo;
